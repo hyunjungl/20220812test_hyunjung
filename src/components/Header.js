@@ -1,17 +1,22 @@
 import styled from "styled-components";
 
-
-export default function Header(){
-    return(
-        <Block>
-            <h2>투두 리스트</h2>
-        </Block>
-    )
+export default function Header({ count }) {
+  return (
+    <Block>
+      <h2>2022년 8월 12일</h2>
+      <p>해야할 일 : {count}개</p>
+    </Block>
+  );
 }
 
-const Block=styled.header`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-`
+const Block = styled.header`
+  color: blueviolet;
+  padding: 0 10px;
+  margin: 10px;
+  h2 {
+    margin-bottom: 10px;
+  }
+  p {
+    font-size: 12px;
+  }
+`;

@@ -1,4 +1,6 @@
 import { useReducer } from "react";
+import styled, { css } from "styled-components";
+
 
 const initialState = {
     input:"",
@@ -20,11 +22,47 @@ function reducer(state, action){
 export default function Input(){
     const [state, dispatch] = useReducer(reducer, initialState);
     return(
-        <div>
+        <Block>
             <input type="text" onChange={(e)=>dispatch({type:"input_change", input: e.target.value})}/>
-            <button onClick={()=> dispatch({type:"list_change"})}>등록</button>
-            <p>{state.list}</p>
-        </div>
+            <Button onClick={()=> dispatch({type:"list_change"})}>등록</Button>
+        </Block>
     );
 }
+
+
+const Block = styled.div`
+  padding: 10px;
+  input {
+    width: 98%;
+    height: 30px;
+    border: 1px solid blueviolet;
+    margin-bottom: 5px;
+    transform: scaleY(0);
+    transition: transform 0.25s;
+    transform-origin: bottom;
+  }
+
+  ${(isEdit) =>
+    isEdit &&
+    css`
+      input {
+        transform: scaleY(1);
+      }
+    `};
+`;
+
+const Button = styled.button`
+  width: 100%;
+  height: 30px;
+  border: none;
+  background: blueviolet;
+  border: 1px solid blueviolet;
+  color: white;
+  ${({ isNotEmpty }) =>
+    isNotEmpty &&
+    css`
+      background-color: blueviolet;
+      cursor: pointer;
+    `}
+`;
 
