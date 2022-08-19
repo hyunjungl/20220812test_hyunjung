@@ -1,40 +1,44 @@
-import { useReducer } from "react";
+import React, { useState } from "react";
+import { useTodoDispatch, useTodoNextId } from "./useTodoContext";
 import styled, { css } from "styled-components";
 
-const initialState = {
-    input:"",
-    list: "",
-};
+export default React.memo(function TodoInput({ input }) {
+  const [active, setActive] = useState(false);
+  const dispatch = useTodoDispatch();
+  const nextId = useTodoNextId();
 
-function reducer(state, action){
-    switch(action.type) {
-        case "input_change":
-            return {...state, input: action.input };
-            case "list_change":
-                return{...state, list: state.input};
-        default:
-            return state;
+  const createTodo = () => {
+    dispatch({ type: "create_todo", id: nextId.current });
+    nextId.current++;
+  };
+
+  const handleInput = (e) => {
+    dispatch({ type: "change_input", input: e.target.value });
+  };
+
+  const onClickButton = () => {
+    if (active && input.trim() === "") return;
+    if (active) {
+      createTodo();
+      setActive(false);
+    } else {
+      setActive(true);
     }
-
-}
-
-export default function Input(){
-    const [ dispatch] = useReducer(reducer, initialState);
-
+  };
 
     return(
-        <Block>
-            <input type="text" onChange={(e)=>dispatch({type:"input_change", input: e.target.value})}/>
-            <Button onClick={()=> dispatch({type:"list_change"})}>등록</Button>
+        <Block active={active}>
+            <input type="text" onChange={handleInput} value={input} />
+            <Button onClick={onClickButton}>등록</Button>
         </Block>
     );
-}
+});
 
 
 const Block = styled.div`
   padding: 10px;
   input {
-    width: 98%;
+    width: 100%;
     height: 30px;
     border: 1px solid blueviolet;
     margin-bottom: 5px;
@@ -42,9 +46,8 @@ const Block = styled.div`
     transition: transform 0.25s;
     transform-origin: bottom;
   }
-
-  ${(isEdit) =>
-    isEdit &&
+  ${(active) =>
+    active &&
     css`
       input {
         transform: scaleY(1);
@@ -59,11 +62,6 @@ const Button = styled.button`
   background: blueviolet;
   border: 1px solid blueviolet;
   color: white;
-  ${({ isNotEmpty }) =>
-    isNotEmpty &&
-    css`
-      background-color: blueviolet;
-      cursor: pointer;
-    `}
+ 
 `;
 

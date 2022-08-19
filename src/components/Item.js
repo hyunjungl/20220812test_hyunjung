@@ -1,9 +1,23 @@
 import styled, { css } from "styled-components";
+import { useTodoDispatch } from './useTodoContext';
 
-export default function Item({todo,toggleTodo, removeTodo}) {
+
+
+export default function Item({todo}) {
+  const dispatch = useTodoDispatch();
+
+  const toggleTodo = () => {
+    dispatch({ type: "toggle_todo", id: todo.id });
+  };
+
+  const removeTodo = () => {
+    dispatch({ type: "remove_todo", id: todo.id });
+  };
 
   return (
     <Block done={todo.done} onClick={toggleTodo}>
+      <TodoText>{todo.text}</TodoText>
+
       <DelBtn onClick={removeTodo}>
         <div>Delete</div>
       </DelBtn>
@@ -43,4 +57,10 @@ const DelBtn = styled.div`
       transform: translate(0);
     }
   }
+`;
+
+const TodoText = styled.p`
+  font-size: 15px;
+  flex: 1;
+  margin-left: 10px;
 `;

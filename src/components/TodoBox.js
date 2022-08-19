@@ -1,11 +1,23 @@
+import React, { createContext } from "react";
 import styled from "styled-components";
+import { useTodoState } from "./useTodoContext";
+import Header from "./Header";
+import Input from "./Input";
+import TodoList from "./TodoList";
+
+export const TodoContext = createContext(null);
+
+export default function TodoBox() {
+  const { count, input, todo_list } = useTodoState();
 
 
-
-export default function TodoBox({ children }) {
   return (
     <Container>
-      <Block>{children}</Block>
+      <Block>
+        <Header count={count}></Header>
+        <TodoList todo_list={todo_list} />
+        <Input input={input} />
+      </Block>
     </Container>
   );
 }
