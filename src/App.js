@@ -3,7 +3,7 @@ import Header from "./components/Header";
 import TodoList from "./components/TodoList";
 import Input from "./components/Input";
 import { createGlobalStyle } from 'styled-components';
-import { useReducer } from "react";
+import { useReducer,useRef} from "react";
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -35,6 +35,12 @@ function reducer(state, action){
             done:false,
           }),
         };
+        case "toggle_todo":
+          return{
+            ...state,
+            todo_list: state.todo_list.map((todo)=>
+            todo.id === action.id ? {...todo, done: !todo.done}: todo),
+          };
         case "remove_todo":
           return{
             ...state, 
@@ -45,24 +51,40 @@ function reducer(state, action){
   }
 }
 
-function App() {
-const {
-  state,
-  removeTodo,
-}= useTodo();
+export default function App() {
+  const [state, dispatch]= useReducer(reducer, initialState);
+  const{input, todo_list}=state;
+
+
+  const nextId = useRef(3);
+
+  const createTodo = () => {
+    if (input.trim() === "") return;
+    dispatch({ type: "create_todo", id: nextId.current });
+    nextId.current++;
+  };
+
+
+  const toggleTodo = (id) => {
+    dispatch({ type: "toggle_todo", id });
+  };
+
+  const removeTodo = (id) => {
+    dispatch({ type: "remove_todo", id });
+  };
 
   return (
     <>
     <GlobalStyle/>
       <TodoBox>
         <Header />
-        <TodoList  />
-        <Input />
+        <TodoList todo_list={todo_list}
+        toggleTodo={toggleTodo}
+        removeTodo={removeTodo} />
+        <Input input={input} createTodo={createTodo} />
       </TodoBox>
     </>
   );
 
   }
 
-
-export default App;

@@ -1,7 +1,6 @@
 import { useReducer } from "react";
 import styled, { css } from "styled-components";
 
-
 const initialState = {
     input:"",
     list: "",
@@ -20,7 +19,9 @@ function reducer(state, action){
 }
 
 export default function Input(){
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [ dispatch] = useReducer(reducer, initialState);
+
+
     return(
         <Block>
             <input type="text" onChange={(e)=>dispatch({type:"input_change", input: e.target.value})}/>

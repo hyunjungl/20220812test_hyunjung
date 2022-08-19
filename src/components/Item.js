@@ -1,9 +1,9 @@
 import styled, { css } from "styled-components";
 
-export default function Item({todo,removeTodo}) {
-  const {done}=todo;
+export default function Item({todo,toggleTodo, removeTodo}) {
+
   return (
-    <Block done={done}>
+    <Block done={todo.done} onClick={toggleTodo}>
       <DelBtn onClick={removeTodo}>
         <div>Delete</div>
       </DelBtn>
